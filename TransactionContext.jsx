@@ -7,6 +7,7 @@ export const useTransactions = () => useContext(TransactionContext);
 
 export const TransactionProvider = ({children}) => {
   const [transactions, setTransactions] = useState([]);
+  const [savingGoal, setSavingGoal] = useState(null);
 
   useEffect(() => {
     const loadTransactions = async () => {
@@ -16,7 +17,16 @@ export const TransactionProvider = ({children}) => {
       }
     };
 
+    // Load saving goal
+    const loadSavingGoal = async () => {
+      const storedGoal = await AsyncStorage.getItem('savingGoal');
+      if (storedGoal) {
+        setSavingGoal(JSON.parse(storedGoal));
+      }
+    };
+
     loadTransactions();
+    loadSavingGoal();
   }, []);
 
   const addTransaction = async transaction => {
@@ -28,9 +38,20 @@ export const TransactionProvider = ({children}) => {
     );
   };
 
+  const saveSavingGoal = async goal => {
+    setSavingGoal(goal);
+    await AsyncStorage.setItem('savingGoal', JSON.stringify(goal));
+  };
+
   return (
     <TransactionContext.Provider
-      value={{transactions, setTransactions, addTransaction}}>
+      value={{
+        transactions,
+        setTransactions,
+        addTransaction,
+        savingGoal,
+        saveSavingGoal,
+      }}>
       {children}
     </TransactionContext.Provider>
   );

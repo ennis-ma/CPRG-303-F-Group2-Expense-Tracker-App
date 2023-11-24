@@ -31,8 +31,8 @@ export default function App() {
               // You can return any component that you like here!
               return <Icon name={iconName} size={size} color={color} />;
             },
-            tabBarActiveTintColor: 'blue',
-            tabBarInactiveTintColor: 'gray',
+            tabBarActiveTintColor: '#FFB6C1',
+            tabBarInactiveTintColor: '#AEC6CF',
           })}>
           <Tab.Screen name="Dashboard" component={DashboardScreen} />
           <Tab.Screen name="New Record" component={NewExpenseScreen} />

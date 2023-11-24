@@ -3,6 +3,7 @@ import {View, StyleSheet, ScrollView, Alert} from 'react-native';
 import {Card, ListItem, Text, Icon} from 'react-native-elements';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import {useTransactions} from '../TransactionContext';
+import {commonStyles} from '../styles/CommonStyles';
 
 const HistoryScreen = () => {
   const {transactions, setTransactions} = useTransactions();
@@ -31,34 +32,34 @@ const HistoryScreen = () => {
   };
 
   return (
-    <ScrollView style={styles.container}>
-      <Card>
-        <Card.Title>Transaction History</Card.Title>
+    <ScrollView style={commonStyles.container}>
+      <Card containerStyle={commonStyles.card}>
+        <Text style={commonStyles.title}>Transaction History</Text>
         <Card.Divider />
-        {transactions.length > 0 ? (
-          transactions.map((transaction, index) => (
-            <ListItem key={index} bottomDivider>
-              <ListItem.Content style={styles.listItemContent}>
-                <View>
-                  <ListItem.Title>{transaction.title}</ListItem.Title>
-                  <ListItem.Subtitle>
-                    {transaction.amount >= 0
-                      ? `+$${transaction.amount}`
-                      : transaction.amount}
-                  </ListItem.Subtitle>
-                </View>
-                <Text style={styles.transactionDate}>{transaction.date}</Text>
-              </ListItem.Content>
-              <Icon
-                name="close"
-                type="antdesign"
-                onPress={() => handleDeleteTransaction(transaction.id)}
-              />
-            </ListItem>
-          ))
-        ) : (
-          <Text style={styles.noTransactionsText}>No transactions found.</Text>
-        )}
+        {transactions.map((transaction, index) => (
+          <ListItem key={index} bottomDivider>
+            <ListItem.Content>
+              <View style={commonStyles.listItem}>
+                <ListItem.Title style={commonStyles.listItemTitle}>
+                  {transaction.title}
+                </ListItem.Title>
+                <ListItem.Subtitle style={commonStyles.listItemSubtitle}>
+                  {transaction.amount >= 0
+                    ? `+${transaction.amount}`
+                    : `${transaction.amount}`}
+                </ListItem.Subtitle>
+              </View>
+              <Text style={commonStyles.transactionDate}>
+                {transaction.date}
+              </Text>
+            </ListItem.Content>
+            <Icon
+              name="close"
+              type="antdesign"
+              onPress={() => handleDeleteTransaction(transaction.id)}
+            />
+          </ListItem>
+        ))}
       </Card>
     </ScrollView>
   );

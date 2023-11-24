@@ -1,8 +1,17 @@
 import React, {useState} from 'react';
-import {View, StyleSheet, Platform} from 'react-native';
-import {Card, Button, Input} from 'react-native-elements';
+import {
+  ScrollView,
+  View,
+  Text,
+  TextInput,
+  StyleSheet,
+  TouchableOpacity,
+  Button,
+} from 'react-native';
+import {Card} from 'react-native-elements';
 import DateTimePicker from '@react-native-community/datetimepicker';
 import {useTransactions} from '../TransactionContext';
+import {commonStyles} from '../styles/CommonStyles';
 
 const NewExpenseScreen = ({navigation}) => {
   const [title, setTitle] = useState('');
@@ -34,59 +43,46 @@ const NewExpenseScreen = ({navigation}) => {
   };
 
   return (
-    <View style={styles.container}>
-      <Card>
-        <Card.Title>Add New Record</Card.Title>
-        <Card.Divider />
-        <Input placeholder="Title" value={title} onChangeText={setTitle} />
-        <Input
+    <ScrollView style={commonStyles.container}>
+      <Card containerStyle={commonStyles.card}>
+        <Text style={commonStyles.title}>Add New Record</Text>
+        <TextInput
+          style={commonStyles.input}
+          placeholder="Title"
+          value={title}
+          onChangeText={setTitle}
+        />
+        <TextInput
+          style={commonStyles.input}
           placeholder="Amount"
           value={amount}
-          onChangeText={setAmount}
           keyboardType="numeric"
+          onChangeText={setAmount}
         />
-
-        <View style={styles.radioContainer}>
-          <View style={styles.radioButton}>
-            <Button
-              title="Income"
-              type={transactionType === 'income' ? 'solid' : 'outline'}
-              onPress={() => setTransactionType('income')}
-            />
-          </View>
-          <View style={styles.radioButton}>
-            <Button
-              title="Expense"
-              type={transactionType === 'expense' ? 'solid' : 'outline'}
-              onPress={() => setTransactionType('expense')}
-            />
-          </View>
-        </View>
-
-        <Button
-          title="Select Date"
-          onPress={() => setShowDatePicker(true)}
-          buttonStyle={styles.button}
-        />
+        <TouchableOpacity
+          style={commonStyles.button}
+          onPress={() => setShowDatePicker(true)}>
+          <Text style={commonStyles.buttonText}>Select Date</Text>
+        </TouchableOpacity>
         {showDatePicker && (
           <DateTimePicker
             value={date}
             mode="date"
             display="default"
             onChange={(event, selectedDate) => {
-              setShowDatePicker(Platform.OS === 'ios');
+              setShowDatePicker(false);
               setDate(selectedDate || date);
             }}
             maximumDate={new Date()}
           />
         )}
-        <Button
-          title="Add Record"
-          onPress={handleAddTransaction}
-          buttonStyle={styles.button}
-        />
+        <TouchableOpacity
+          style={commonStyles.button}
+          onPress={handleAddTransaction}>
+          <Text style={commonStyles.buttonText}>Add Record</Text>
+        </TouchableOpacity>
       </Card>
-    </View>
+    </ScrollView>
   );
 };
 
@@ -108,7 +104,6 @@ const styles = StyleSheet.create({
     flex: 1,
     marginHorizontal: 5,
   },
-  // ... other styles if needed ...
 });
 
 export default NewExpenseScreen;
