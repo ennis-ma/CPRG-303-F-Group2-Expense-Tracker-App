@@ -28,8 +28,8 @@ const DashboardScreen = () => {
     const dates = [];
     for (let i = 6; i >= 0; i--) {
       const date = new Date();
-      date.setDate(date.getDate() - i);
-      const day = date.getDate(); // Get the day as a number
+      date.setUTCDate(date.getUTCDate() - i); // Use UTC date to avoid time zone issues
+      const day = date.getUTCDate(); // Get the day as a number
       dates.push(day.toString()); // Convert to string and add to array
     }
     return dates;
@@ -50,7 +50,8 @@ const DashboardScreen = () => {
 
     // Aggregate transactions
     transactions.forEach(transaction => {
-      const transactionDay = new Date(transaction.date).getDate().toString(); // Get day as string
+      const transactionDate = new Date(transaction.date);
+      const transactionDay = transactionDate.getUTCDate().toString(); // Use UTC date
       if (last7Days.includes(transactionDay)) {
         const amount = transaction.amount;
         const category = amount >= 0 ? 'income' : 'expense';
